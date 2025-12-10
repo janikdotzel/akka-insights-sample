@@ -96,4 +96,6 @@ libraryDependencies ++= Seq(
   // Use Akka gRPC instrumentation
   Cinnamon.library.cinnamonAkkaGrpc,
   // Use Akka Cluster instrumentation
-  Cinnamon.library.cinnamonAkkaCluster)
+  Cinnamon.library.cinnamonAkkaCluster,
+  // OpenTelemetry
+  Cinnamon.library.cinnamonOpenTelemetry)
