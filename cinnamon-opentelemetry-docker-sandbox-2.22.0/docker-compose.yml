@@ -1,0 +1,52 @@
+version: "2"
+services:
+
+  opentelemetry-collector:
+    image: otel/opentelemetry-collector-contrib:0.100.0
+    command: ["--config=/etc/opentelemetry-collector.yaml"]
+    volumes:
+      - ./opentelemetry/opentelemetry-collector.yaml:/etc/opentelemetry-collector.yaml
+    ports:
+      - "4317:4317"   # OTLP gRPC receiver
+      - "9411:9411"   # Zipkin trace receiver
+
+  prometheus:
+    image: prom/prometheus:v2.51.2
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - '--web.enable-remote-write-receiver'
+      - "--enable-feature=native-histograms"
+      - "--enable-feature=exemplar-storage"
+    ports:
+      - "9090:9090"
+
+  loki:
+    image: grafana/loki:3.0.0
+    command:
+      - "-config.file=/etc/loki/local-config.yaml"
+    ports:
+      - "3100:3100"
+
+  tempo:
+    image: grafana/tempo:2.4.1
+    command:
+      - "-config.file=/etc/tempo.yaml"
+    volumes:
+      - ./tempo/tempo.yaml:/etc/tempo.yaml
+    ports:
+      - "3200:3200"
+
+  grafana:
+    image: grafana/grafana:10.4.2
+    volumes:
+      - ./grafana/plugins/cinnamon-opentelemetry-app:/var/lib/grafana/plugins/cinnamon-opentelemetry-app
+      - ./grafana/provisioning:/etc/grafana/provisioning
+    ports: ["3000:3000"]
+    depends_on: ["prometheus", "loki", "tempo"]
+    environment:
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_BASIC_ENABLED=false
+      - GF_DEFAULT_APP_MODE=development
+      - GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS=cinnamon-opentelemetry-app
+      - GF_FEATURE_TOGGLES_ENABLE=traceqlEditor

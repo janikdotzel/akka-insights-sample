@@ -1,0 +1,462 @@
+{
+  "id": null,
+  "title": "Java Futures",
+  "tags": [],
+  "style": "dark",
+  "timezone": "browser",
+  "editable": true,
+  "hideControls": true,
+  "sharedCrosshair": false,
+  "rows": [
+    {
+      "title": "",
+      "collapse": false,
+      "editable": true,
+      "height": "250px",
+      "panels": [
+        {
+          "datasource": "Cinnamon Prometheus (via OpenTelemetry)",
+          "title": "Created futures: 1 min rate",
+          "description": "The rate of CompletableFutures being created (for the given name).",
+          "type": "timeseries",
+          "id": 4,
+          "interval": "10s",
+          "fieldConfig": {
+            "defaults": {
+              "custom": {
+                "drawStyle": "line",
+                "lineInterpolation": "linear",
+                "lineWidth": 2,
+                "fillOpacity": 10,
+                "gradientMode": "none",
+                "showPoints": "never",
+                "stacking": {
+                  "mode": "none"
+                },
+                "axisPlacement": "auto",
+                "axisLabel": "futures/second"
+              },
+              "color": {
+                "mode": "palette-classic"
+              },
+              "unit": "ops",
+              "min": 0,
+              "max": null
+            }
+          },
+          "options": {
+            "legend": {
+              "showLegend": false
+            },
+            "tooltip": {
+              "mode": "multi",
+              "sort": "desc"
+            }
+          },
+          "span": 6,
+          "targets": [
+            {
+              "expr": "irate(java_future_created_futures_total{host_name=~\"$Servers\", service_name=~\"$Applications\", java_future=~\"$Futures\"}[1m])",
+              "format": "time_series",
+              "legendFormat": "{{service_name}} / {{java_future}}"
+            }
+          ]
+        },
+        {
+          "datasource": "Cinnamon Prometheus (via OpenTelemetry)",
+          "title": "Future completing time ($Quantile quantile)",
+          "description": "The time from creation to completing the CompletableFuture.",
+          "type": "timeseries",
+          "id": 3,
+          "interval": "10s",
+          "fieldConfig": {
+            "defaults": {
+              "custom": {
+                "drawStyle": "line",
+                "lineInterpolation": "linear",
+                "lineWidth": 2,
+                "fillOpacity": 10,
+                "gradientMode": "none",
+                "showPoints": "never",
+                "stacking": {
+                  "mode": "none"
+                },
+                "axisPlacement": "auto",
+                "axisLabel": null
+              },
+              "color": {
+                "mode": "palette-classic"
+              },
+              "unit": "s",
+              "min": 0,
+              "max": null
+            }
+          },
+          "options": {
+            "legend": {
+              "showLegend": false
+            },
+            "tooltip": {
+              "mode": "multi",
+              "sort": "desc"
+            }
+          },
+          "span": 6,
+          "targets": [
+            {
+              "expr": "histogram_quantile($Quantile, {__name__=~\"java_future_completing_time_seconds(|_bucket)\", host_name=~\"$Servers\", service_name=~\"$Applications\", java_future=~\"$Futures\"})",
+              "format": "time_series",
+              "legendFormat": "{{service_name}} / {{java_future}}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "",
+      "collapse": false,
+      "editable": true,
+      "height": "250px",
+      "panels": [
+        {
+          "datasource": "Cinnamon Prometheus (via OpenTelemetry)",
+          "title": "Scheduled futures ($Quantile quantile)",
+          "description": "The number of futures currently scheduled (includes both future async sources and completion callbacks).",
+          "type": "timeseries",
+          "id": 1,
+          "interval": "10s",
+          "fieldConfig": {
+            "defaults": {
+              "custom": {
+                "drawStyle": "line",
+                "lineInterpolation": "linear",
+                "lineWidth": 2,
+                "fillOpacity": 10,
+                "gradientMode": "none",
+                "showPoints": "never",
+                "stacking": {
+                  "mode": "none"
+                },
+                "axisPlacement": "auto",
+                "axisLabel": "futures"
+              },
+              "color": {
+                "mode": "palette-classic"
+              },
+              "unit": "short",
+              "min": 0,
+              "max": null
+            }
+          },
+          "options": {
+            "legend": {
+              "showLegend": false
+            },
+            "tooltip": {
+              "mode": "multi",
+              "sort": "desc"
+            }
+          },
+          "span": 6,
+          "targets": [
+            {
+              "expr": "histogram_quantile($Quantile, {__name__=~\"java_future_scheduled_futures(|_bucket)\", host_name=~\"$Servers\", service_name=~\"$Applications\", java_future=~\"$Futures\"})",
+              "format": "time_series",
+              "legendFormat": "{{service_name}} / {{java_future}}"
+            }
+          ]
+        },
+        {
+          "datasource": "Cinnamon Prometheus (via OpenTelemetry)",
+          "title": "Future scheduling time ($Quantile quantile)",
+          "description": "The time that futures/callbacks are in scheduling (in executor queues waiting to run).",
+          "type": "timeseries",
+          "id": 2,
+          "interval": "10s",
+          "fieldConfig": {
+            "defaults": {
+              "custom": {
+                "drawStyle": "line",
+                "lineInterpolation": "linear",
+                "lineWidth": 2,
+                "fillOpacity": 10,
+                "gradientMode": "none",
+                "showPoints": "never",
+                "stacking": {
+                  "mode": "none"
+                },
+                "axisPlacement": "auto",
+                "axisLabel": null
+              },
+              "color": {
+                "mode": "palette-classic"
+              },
+              "unit": "s",
+              "min": 0,
+              "max": null
+            }
+          },
+          "options": {
+            "legend": {
+              "showLegend": false
+            },
+            "tooltip": {
+              "mode": "multi",
+              "sort": "desc"
+            }
+          },
+          "span": 6,
+          "targets": [
+            {
+              "expr": "histogram_quantile($Quantile, {__name__=~\"java_future_scheduling_time_seconds(|_bucket)\", host_name=~\"$Servers\", service_name=~\"$Applications\", java_future=~\"$Futures\"})",
+              "format": "time_series",
+              "legendFormat": "{{service_name}} / {{java_future}}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "",
+      "collapse": false,
+      "editable": true,
+      "height": "250px",
+      "panels": [
+        {
+          "datasource": "Cinnamon Prometheus (via OpenTelemetry)",
+          "title": "Processed futures: 1 min rate",
+          "description": "The rate of futures/callbacks being processed (marked when the future/callback has finished running).",
+          "type": "timeseries",
+          "id": 6,
+          "interval": "10s",
+          "fieldConfig": {
+            "defaults": {
+              "custom": {
+                "drawStyle": "line",
+                "lineInterpolation": "linear",
+                "lineWidth": 2,
+                "fillOpacity": 10,
+                "gradientMode": "none",
+                "showPoints": "never",
+                "stacking": {
+                  "mode": "none"
+                },
+                "axisPlacement": "auto",
+                "axisLabel": "futures/second"
+              },
+              "color": {
+                "mode": "palette-classic"
+              },
+              "unit": "ops",
+              "min": 0,
+              "max": null
+            }
+          },
+          "options": {
+            "legend": {
+              "showLegend": false
+            },
+            "tooltip": {
+              "mode": "multi",
+              "sort": "desc"
+            }
+          },
+          "span": 6,
+          "targets": [
+            {
+              "expr": "irate(java_future_processed_futures_total{host_name=~\"$Servers\", service_name=~\"$Applications\", java_future=~\"$Futures\"}[1m])",
+              "format": "time_series",
+              "legendFormat": "{{service_name}} / {{java_future}}"
+            }
+          ]
+        },
+        {
+          "datasource": "Cinnamon Prometheus (via OpenTelemetry)",
+          "title": "Future processing time ($Quantile quantile)",
+          "description": "The time that futures/callbacks take to run.",
+          "type": "timeseries",
+          "id": 5,
+          "interval": "10s",
+          "fieldConfig": {
+            "defaults": {
+              "custom": {
+                "drawStyle": "line",
+                "lineInterpolation": "linear",
+                "lineWidth": 2,
+                "fillOpacity": 10,
+                "gradientMode": "none",
+                "showPoints": "never",
+                "stacking": {
+                  "mode": "none"
+                },
+                "axisPlacement": "auto",
+                "axisLabel": null
+              },
+              "color": {
+                "mode": "palette-classic"
+              },
+              "unit": "s",
+              "min": 0,
+              "max": null
+            }
+          },
+          "options": {
+            "legend": {
+              "showLegend": false
+            },
+            "tooltip": {
+              "mode": "multi",
+              "sort": "desc"
+            }
+          },
+          "span": 6,
+          "targets": [
+            {
+              "expr": "histogram_quantile($Quantile, {__name__=~\"java_future_processing_time_seconds(|_bucket)\", host_name=~\"$Servers\", service_name=~\"$Applications\", java_future=~\"$Futures\"})",
+              "format": "time_series",
+              "legendFormat": "{{service_name}} / {{java_future}}"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "time": {
+    "from": "now-15m",
+    "to": "now"
+},
+  "timepicker": {
+    "refresh_intervals": [
+      "5s",
+      "10s",
+      "30s",
+      "1m",
+      "5m",
+      "15m",
+      "30m",
+      "1h",
+      "2h",
+      "1d"
+    ],
+    "time_options": [
+      "5m",
+      "15m",
+      "1h",
+      "6h",
+      "12h",
+      "24h",
+      "2d",
+      "7d",
+      "30d"
+    ]
+},
+  "templating": {
+    "list": [
+      {
+          "current": {},
+          "datasource": "Cinnamon Prometheus (via OpenTelemetry)",
+          "hide": 0,
+          "includeAll": true,
+          "allValue": ".*",
+          "multi": true,
+          "name": "Applications",
+          "options": [],
+          "query": "label_values(service_name)",
+          "refresh": 2,
+          "regex": "",
+          "tagValuesQuery": "",
+          "tagsQuery": "name",
+          "type": "query",
+          "useTags": false
+      },
+      {
+          "current": {},
+          "datasource": "Cinnamon Prometheus (via OpenTelemetry)",
+          "hide": 0,
+          "includeAll": true,
+          "allValue": ".*",
+          "multi": true,
+          "name": "Servers",
+          "options": [],
+          "query": "label_values(java_future_created_futures_total{service_name=~\"$Applications\"}, host_name)",
+          "refresh": 2,
+          "regex": "",
+          "tagValuesQuery": "",
+          "tagsQuery": "name",
+          "type": "query",
+          "useTags": false
+      },
+      {
+          "current": {},
+          "datasource": "Cinnamon Prometheus (via OpenTelemetry)",
+          "hide": 0,
+          "includeAll": true,
+          "allValue": ".*",
+          "multi": true,
+          "name": "Futures",
+          "options": [],
+          "query": "label_values(java_future_created_futures_total{host_name=~\"$Servers\", service_name=~\"$Applications\"}, java_future)",
+          "refresh": 2,
+          "regex": "",
+          "tagValuesQuery": "",
+          "tagsQuery": "name",
+          "type": "query",
+          "useTags": false
+      },
+      {
+          "current": {
+            "tags": [],
+            "text": "0.50",
+            "value": "0.50"
+          },
+          "datasource": null,
+          "hide": 0,
+          "includeAll": false,
+          "multi": false,
+          "name": "Quantile",
+          "options": [
+            {
+              "selected": true,
+              "text": "0.50",
+              "value": "0.50"
+            },
+            {
+              "selected": false,
+              "text": "0.75",
+              "value": "0.75"
+            },
+            {
+              "selected": false,
+              "text": "0.90",
+              "value": "0.90"
+            },
+            {
+              "selected": false,
+              "text": "0.95",
+              "value": "0.95"
+            },
+            {
+              "selected": false,
+              "text": "0.99",
+              "value": "0.99"
+            }
+          ],
+          "query": "0.50, 0.75, 0.90, 0.95, 0.99",
+          "refresh": 0,
+          "regex": "",
+          "tagValuesQuery": "",
+          "tagsQuery": "name",
+          "type": "custom",
+          "useTags": false
+      }
+    ]
+  },
+  "annotations": {
+  "list": []
+  },
+  "refresh": false,
+  "schemaVersion": 12,
+  "version": 3,
+  "links": [],
+  "gnetId": null
+}
