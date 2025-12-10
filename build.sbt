@@ -36,12 +36,17 @@ val AkkaProjectionVersion =
   sys.props.getOrElse("akka-projection.version", "1.6.16")
 val AkkaDiagnosticsVersion = "2.2.2"
 
-enablePlugins(AkkaGrpcPlugin, JavaAppPackaging, DockerPlugin)
+enablePlugins(AkkaGrpcPlugin, JavaAppPackaging, DockerPlugin, Cinnamon)
 
 dockerBaseImage := "docker.io/library/eclipse-temurin:21.0.1_12-jre-jammy"
 dockerUsername := sys.props.get("docker.username")
 dockerRepository := sys.props.get("docker.registry")
 dockerUpdateLatest := true
+// Add the Cinnamon Agent for run and test
+run / cinnamon := true
+test / cinnamon := true
+// Set the Cinnamon Agent log level
+cinnamonLogLevel := "INFO"
 
 ThisBuild / dynverSeparator := "-"
 
@@ -77,4 +82,18 @@ libraryDependencies ++= Seq(
   "com.lightbend.akka" %% "akka-projection-eventsourced" % AkkaProjectionVersion,
   "com.lightbend.akka" %% "akka-projection-r2dbc" % AkkaProjectionVersion,
   "com.lightbend.akka" %% "akka-projection-grpc" % AkkaProjectionVersion,
-  "com.lightbend.akka" %% "akka-projection-testkit" % AkkaProjectionVersion % Test)
+  "com.lightbend.akka" %% "akka-projection-testkit" % AkkaProjectionVersion % Test,
+  // Use Coda Hale Metrics
+  Cinnamon.library.cinnamonCHMetrics,
+  // Use Akka instrumentation
+  Cinnamon.library.cinnamonAkka,
+  Cinnamon.library.cinnamonAkkaTyped,
+  Cinnamon.library.cinnamonAkkaPersistence,
+  Cinnamon.library.cinnamonAkkaStream,
+  Cinnamon.library.cinnamonAkkaProjection,
+  // Use Akka HTTP instrumentation
+  Cinnamon.library.cinnamonAkkaHttp,
+  // Use Akka gRPC instrumentation
+  Cinnamon.library.cinnamonAkkaGrpc,
+  // Use Akka Cluster instrumentation
+  Cinnamon.library.cinnamonAkkaCluster)
