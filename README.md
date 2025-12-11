@@ -1,5 +1,12 @@
 # Akka Insights Sample
 
+## Setup 
+
+The Akka dependencies are available from Akka’s secure library repository. 
+To access them you need to use a secure, tokenized URL as specified at https://account.akka.io/token.
+
+The resolver need to be added to the `akka.sbt` and `plugins.sbt` before you start this project.
+
 ## Start OpenTelemetry developer sandbox
 
 To run the OpenTelemetry Docker developer sandbox, first change into the unzipped directory at a terminal:
