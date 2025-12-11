@@ -1,7 +1,23 @@
-## Running the sample code
+# Akka Insights Sample
+
+## Start OpenTelemetry developer sandbox
+
+To run the OpenTelemetry Docker developer sandbox, first change into the unzipped directory at a terminal:
+```
+cd cinnamon-opentelemetry-docker-sandbox-2.22.0
+```
+
+Make sure that Docker is running and then start the developer sandbox using Docker Compose:
+```
+docker compose up
+```
+
+The developer sandbox version of Grafana is now available at http://localhost:3000.
+
+
+## Start the Akka application
 
 1. Start a local PostgreSQL server on default port 5432. The included `docker-compose.yml` starts everything required for running locally.
-
     ```shell
     docker compose up -d
 
@@ -11,13 +27,11 @@
     ```
 
 2. Start a first node:
-
     ```
     sbt -Dconfig.resource=local1.conf run
     ```
 
 3. Try it with [grpcurl](https://github.com/fullstorydev/grpcurl):
-
     ```shell
     # add item to cart
     grpcurl -d '{"cartId":"cart2", "itemId":"socks", "quantity":3}' -plaintext 127.0.0.1:8101 shoppingcart.ShoppingCartService.AddItem
