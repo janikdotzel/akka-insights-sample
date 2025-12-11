@@ -16,12 +16,8 @@
     <import class="ch.qos.logback.core.hook.DefaultShutdownHook"/>
     <shutdownHook class="DefaultShutdownHook"/>
 
-    <appender name="OpenTelemetry" class="io.opentelemetry.instrumentation.logback.appender.v1_0.OpenTelemetryAppender">
-    </appender>
-
     <root level="INFO">
         <appender-ref ref="ASYNC"/>
-        <appender-ref ref="OpenTelemetry"/>
     </root>
 
 </configuration>
