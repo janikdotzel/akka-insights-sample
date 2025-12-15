@@ -98,4 +98,11 @@ libraryDependencies ++= Seq(
   // Use Akka Cluster instrumentation
   Cinnamon.library.cinnamonAkkaCluster,
   // OpenTelemetry
-  Cinnamon.library.cinnamonOpenTelemetry)
+  Cinnamon.library.cinnamonOpenTelemetry,
+    // Logback Appender
+  Cinnamon.library.cinnamonOpenTelemetryLogbackAppender)
+
+dependencyOverrides ++= Seq(
+  "io.opentelemetry" % "opentelemetry-api" % "1.37.0",
+  "io.opentelemetry" % "opentelemetry-api-incubator" % "1.37.0-alpha"
+)
