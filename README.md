@@ -42,13 +42,35 @@ The developer sandbox version of Grafana is now available at http://localhost:30
     ```shell
     # add item to cart
     grpcurl -d '{"cartId":"cart2", "itemId":"socks", "quantity":3}' -plaintext 127.0.0.1:8101 shoppingcart.ShoppingCartService.AddItem
-   
+
     # get cart
     grpcurl -d '{"cartId":"cart2"}' -plaintext 127.0.0.1:8101 shoppingcart.ShoppingCartService.GetCart
-   
+
     # update quantity of item
     grpcurl -d '{"cartId":"cart2", "itemId":"socks", "quantity":5}' -plaintext 127.0.0.1:8101 shoppingcart.ShoppingCartService.UpdateItem
-   
+
     # check out cart
     grpcurl -d '{"cartId":"cart2"}' -plaintext 127.0.0.1:8101 shoppingcart.ShoppingCartService.Checkout
+    ```
+
+4. Or try it with curl (HTTP REST API on port 8080):
+    ```shell
+    # add item to cart
+    curl -X POST http://localhost:8080/carts/cart1/items \
+      -H "Content-Type: application/json" \
+      -d '{"itemId":"socks", "quantity":3}'
+
+    # get cart
+    curl http://localhost:8080/carts/cart1
+
+    # update quantity of item
+    curl -X PUT http://localhost:8080/carts/cart1/items/socks \
+      -H "Content-Type: application/json" \
+      -d '{"itemId":"socks", "quantity":5}'
+
+    # remove item from cart
+    curl -X DELETE http://localhost:8080/carts/cart1/items/socks
+
+    # checkout cart
+    curl -X POST http://localhost:8080/carts/cart1/checkout
     ```

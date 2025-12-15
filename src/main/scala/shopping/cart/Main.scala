@@ -30,12 +30,21 @@ object Main {
 
     ShoppingCart.init(system)
 
+    val grpcService = new ShoppingCartServiceImpl(system)
+
+    // Start gRPC server
     val grpcInterface =
       system.settings.config.getString("shopping-cart-service.grpc.interface")
     val grpcPort =
       system.settings.config.getInt("shopping-cart-service.grpc.port")
-    val grpcService = new ShoppingCartServiceImpl(system)
     ShoppingCartServer.start(grpcInterface, grpcPort, system, grpcService)
+
+    // Start HTTP server
+    val httpInterface =
+      system.settings.config.getString("shopping-cart-service.http.interface")
+    val httpPort =
+      system.settings.config.getInt("shopping-cart-service.http.port")
+    ShoppingCartHttpServer.start(httpInterface, httpPort, system)
   }
 
 }
