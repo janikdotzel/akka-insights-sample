@@ -100,7 +100,9 @@ libraryDependencies ++= Seq(
   // OpenTelemetry
   Cinnamon.library.cinnamonOpenTelemetry,
     // Logback Appender
-  Cinnamon.library.cinnamonOpenTelemetryLogbackAppender)
+  Cinnamon.library.cinnamonOpenTelemetryLogbackAppender,
+  Cinnamon.library.cinnamonOpenTracing,
+  Cinnamon.library.cinnamonOpenTracingZipkin)
 
 dependencyOverrides ++= Seq(
   "io.opentelemetry" % "opentelemetry-api" % "1.37.0",
