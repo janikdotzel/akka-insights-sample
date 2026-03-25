@@ -5,6 +5,7 @@ import akka.actor.typed.scaladsl.Behaviors
 import akka.management.cluster.bootstrap.ClusterBootstrap
 import akka.management.scaladsl.AkkaManagement
 import org.slf4j.LoggerFactory
+import shopping.stream.StreamDemoHttpServer
 
 import scala.util.control.NonFatal
 
@@ -39,12 +40,13 @@ object Main {
       system.settings.config.getInt("shopping-cart-service.grpc.port")
     ShoppingCartServer.start(grpcInterface, grpcPort, system, grpcService)
 
-    // Start HTTP server
+    // Start HTTP server (shopping cart + stream demo routes combined)
     val httpInterface =
       system.settings.config.getString("shopping-cart-service.http.interface")
     val httpPort =
       system.settings.config.getInt("shopping-cart-service.http.port")
-    ShoppingCartHttpServer.start(httpInterface, httpPort, system)
+    val streamRoutes = StreamDemoHttpServer.routes(system)
+    ShoppingCartHttpServer.start(httpInterface, httpPort, system, streamRoutes)
   }
 
 }

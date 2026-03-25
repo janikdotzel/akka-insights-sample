@@ -74,3 +74,10 @@ The developer sandbox version of Grafana is now available at http://localhost:30
     # checkout cart
     curl -X POST http://localhost:8080/carts/cart1/checkout
     ```
+
+## Sensor Demo
+```
+curl -X POST http://localhost:8080/stream/run -H 'Content-Type: application/json' -d '{"count": 100}' 
+```
+
+curl "http://localhost:8080/stream/run?count=200"

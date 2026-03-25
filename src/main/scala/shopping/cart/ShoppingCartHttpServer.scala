@@ -38,7 +38,8 @@ object ShoppingCartHttpServer {
   def start(
       interface: String,
       port: Int,
-      system: ActorSystem[_]): Unit = {
+      system: ActorSystem[_],
+      extraRoutes: Route*): Unit = {
     implicit val sys: ActorSystem[_] = system
     implicit val ec: ExecutionContext = system.executionContext
 
@@ -46,7 +47,8 @@ object ShoppingCartHttpServer {
       Timeout.create(system.settings.config.getDuration("shopping-cart-service.ask-timeout"))
 
     val sharding = ClusterSharding(system)
-    val routes = createRoutes(sharding)
+    val cartRoutes = createRoutes(sharding)
+    val routes = if (extraRoutes.nonEmpty) concat(cartRoutes +: extraRoutes: _*) else cartRoutes
 
     val bound = Http()
       .newServerAt(interface, port)
